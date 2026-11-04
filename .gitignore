@@ -1,0 +1,15 @@
+# Environment variables
+.env
+
+# IntelliJ IDEA
+.idea/
+
+# Maven build files
+**/target/
+
+# Logs
+*.log
+
+# OS files
+.DS_Store
+Thumbs.db
