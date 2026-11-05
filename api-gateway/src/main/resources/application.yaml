@@ -38,7 +38,7 @@ spring:
                 - Path=/api/v1/orders/**
               filters:
                 - StripPrefix=2
-                - RedirectTo=302, https://github.com/ajay-1dev?tab=repositories
+#                - RedirectTo=302, https://github.com/ajay-1dev?tab=repositories
 
             - id: inventory-service
               uri: lb://inventory-service
