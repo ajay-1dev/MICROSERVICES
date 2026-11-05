@@ -4,6 +4,7 @@ package com.ajay.development.ecommerce.inventory_service.controller;
 import com.ajay.development.ecommerce.inventory_service.dto.OrderRequestDto;
 import com.ajay.development.ecommerce.inventory_service.dto.ProductDto;
 import com.ajay.development.ecommerce.inventory_service.service.ProductService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cloud.client.ServiceInstance;
@@ -26,7 +27,7 @@ public class ProductController {
 
 
     @GetMapping("/fetchOrders")
-    public ResponseEntity<String> fetchFromOrdersService(){
+    public ResponseEntity<String> fetchFromOrdersService(HttpServletRequest request) {
         ServiceInstance serviceInstance = discoveryClient.getInstances("order-service")
                 .getFirst();
 
@@ -38,7 +39,7 @@ public class ProductController {
 
         //recommended practice
         return restClient.get()
-                .uri(serviceInstance.getUri() + "/api/v1/orders/hello")
+                .uri(serviceInstance.getUri() + "/orders/core/hello")
                 .retrieve()
                 .toEntity(String.class);
 
@@ -57,7 +58,7 @@ public class ProductController {
 
         //recommended practice
         return restClient.get()
-                .uri(serviceInstance.getUri() + "/api/v1/orders/"+id)
+                .uri(serviceInstance.getUri() + "/orders/core/"+id)
                 .retrieve()
                 .toEntity(OrderRequestDto.class);
 
