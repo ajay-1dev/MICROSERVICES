@@ -36,7 +36,13 @@ eureka:
 resilience4j:
   retry:
     instances:
-      inventory:
+      inventoryRetry:
         maxRetryAttempts: 3
         waitDuration: 25s
+  ratelimiter:
+    instances:
+      inventoryRatelimiter:
+        limitForPeriod: 2
+        limitRefreshPeriod: 10s
+        timeoutDuration: 1s
 

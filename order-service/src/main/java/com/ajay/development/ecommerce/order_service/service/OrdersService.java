@@ -7,6 +7,7 @@ import com.ajay.development.ecommerce.order_service.entity.OrderItem;
 import com.ajay.development.ecommerce.order_service.entity.OrderStatus;
 import com.ajay.development.ecommerce.order_service.entity.Orders;
 import com.ajay.development.ecommerce.order_service.repository.OrdersRepository;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import io.github.resilience4j.retry.annotation.Retry;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -37,7 +38,8 @@ public class OrdersService {
     }
 
 
-    @Retry(name = "inventory" , fallbackMethod = "createOrderFallback")
+    @Retry(name = "inventoryRetry" , fallbackMethod = "createOrderFallback")
+    @RateLimiter(name = "inventoryRatelimiter" , fallbackMethod = "createOrderFallbackForRatelimiter" )
     public OrderRequestDto createOrder(OrderRequestDto orderRequestDto) {
         log.info("Creating new order and calling inventory");
         Double totalPrice = inventoryFeignClient.reduceStocks(orderRequestDto);
@@ -54,6 +56,12 @@ public class OrdersService {
     }
 
     public OrderRequestDto createOrderFallback(OrderRequestDto orderRequestDto, Throwable throwable) {
+        log.error("Fallback occured due to : {}", throwable.getMessage());
+        return new OrderRequestDto();
+    }
+
+
+    public OrderRequestDto createOrderFallbackForRatelimiter(OrderRequestDto orderRequestDto, Throwable throwable) {
         log.error("Fallback occured due to : {}", throwable.getMessage());
         return new OrderRequestDto();
     }
