@@ -33,6 +33,43 @@ eureka:
     service-url:
       defaultZone: http://localhost:8761/eureka
 
+#Using default Configs
+#resilience4j:
+#
+#  retry:
+#    configs:
+#      default:
+#        maxRetryAttempts: 3
+#        waitDuration: 25s
+#    instances:
+#      inventoryRetry:
+#        baseConfig: default
+#
+#  ratelimiter:
+#    configs:
+#      default:
+#        limitForPeriod: 2
+#        limitRefreshPeriod: 10s
+#        timeoutDuration: 1s
+#    instances:
+#      inventoryRatelimiter:
+#        baseConfig: default
+#
+#  circuitbreaker:
+#    configs:
+#      default:
+#        registerHealthIndicator: true
+#        slidingWindowSize: 10
+#        slidingWindowType: COUNT_BASED
+#        minimumNumberOfCalls: 10
+#        failureRateThreshold: 50
+#        waitDurationInOpenState: 20s
+#        permittedNumberOfCallsInHalfOpenState: 3
+#        eventConsumerBufferSize: 10
+#
+#    instances:
+#      inventoryCircuitBreaker:
+#        baseConfig: default
 resilience4j:
   retry:
     instances:
@@ -45,4 +82,27 @@ resilience4j:
         limitForPeriod: 2
         limitRefreshPeriod: 10s
         timeoutDuration: 1s
+  circuitbreaker:
+    instances:
+      inventoryCircuitBreaker:
+        registerHealthIndicator: true
+        slidingWindowSize: 10
+        slidingWindowType: COUNT_BASED
+        minimumNumberOfCalls: 10
+        failureRateThreshold: 50
+        waitDurationInOpenState: 20s
+        permittedNumberOfCallsInHalfOpenState: 3
+        eventConsumerBufferSize: 10
 
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
