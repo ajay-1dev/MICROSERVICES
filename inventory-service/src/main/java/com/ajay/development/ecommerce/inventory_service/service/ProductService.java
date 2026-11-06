@@ -41,7 +41,7 @@ public class ProductService {
     public Double reduceStocks(OrderRequestDto orderRequestDto) {
         log.info("Reducing the stocks");
         Double totalPrice = 0.0;
-        for(OrderRequestItemDto orderRequestItemDto: orderRequestDto.getItems()) {
+        for(OrderRequestItemDto orderRequestItemDto: orderRequestDto.getOrderItems()) {
             Long productId = orderRequestItemDto.getProductId();
             Integer quantity = orderRequestItemDto.getQuantity();
 
